@@ -4,156 +4,248 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>PSD2 Consent - Login</title>
+    <link rel="stylesheet" href="https://unpkg.com/@carbon/styles@1.59.0/css/styles.min.css">
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #f4f4f4 0%, #e8e8e8 100%);
             min-height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
-            padding: 20px;
+            padding: var(--cds-spacing-07);
+            font-family: 'IBM Plex Sans', 'Helvetica Neue', Arial, sans-serif;
         }
         
-        .container {
-            background: white;
-            border-radius: 12px;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
-            padding: 40px;
-            max-width: 400px;
+        .cds--grid {
+            max-width: 550px;
             width: 100%;
         }
         
-        .header {
-            text-align: center;
-            margin-bottom: 30px;
-        }
-        
-        .header h1 {
-            color: #333;
-            font-size: 28px;
-            margin-bottom: 10px;
-        }
-        
-        .header p {
-            color: #666;
-            font-size: 14px;
-        }
-        
-        .app-info {
-            background: #f8f9fa;
-            border-left: 4px solid #667eea;
-            padding: 15px;
-            margin-bottom: 25px;
+        .login-container {
+            background: #ffffff;
+            padding: var(--cds-spacing-09);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
             border-radius: 4px;
         }
         
-        .app-info strong {
-            color: #333;
-            display: block;
-            margin-bottom: 5px;
-        }
-        
-        .app-info span {
-            color: #667eea;
-            font-weight: 600;
-        }
-        
-        .form-group {
-            margin-bottom: 20px;
-        }
-        
-        label {
-            display: block;
-            color: #333;
-            font-weight: 500;
-            margin-bottom: 8px;
-            font-size: 14px;
-        }
-        
-        input[type="text"],
-        input[type="password"] {
-            width: 100%;
-            padding: 12px 15px;
-            border: 2px solid #e0e0e0;
-            border-radius: 6px;
-            font-size: 14px;
-            transition: border-color 0.3s;
-        }
-        
-        input[type="text"]:focus,
-        input[type="password"]:focus {
-            outline: none;
-            border-color: #667eea;
-        }
-        
-        .btn {
-            width: 100%;
-            padding: 14px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            border: none;
-            border-radius: 6px;
-            font-size: 16px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: transform 0.2s, box-shadow 0.2s;
-        }
-        
-        .btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.4);
-        }
-        
-        .btn:active {
-            transform: translateY(0);
-        }
-        
-        .security-note {
-            margin-top: 20px;
-            padding: 12px;
-            background: #fff3cd;
-            border-radius: 6px;
-            font-size: 12px;
-            color: #856404;
+        .header-section {
+            margin-bottom: var(--cds-spacing-08);
             text-align: center;
+            padding-bottom: var(--cds-spacing-06);
+            border-bottom: 2px solid #e0e0e0;
+        }
+        
+        .header-section h1 {
+            font-size: 2rem;
+            font-weight: 400;
+            line-height: 1.3;
+            color: #161616;
+            margin-bottom: var(--cds-spacing-04);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: var(--cds-spacing-04);
+        }
+        
+        .header-section p {
+            font-size: 1rem;
+            color: #525252;
+            line-height: 1.5;
+        }
+        
+        .app-info-tile {
+            margin-bottom: var(--cds-spacing-07);
+        }
+        
+        .app-info-content {
+            padding: var(--cds-spacing-07);
+            background-color: #e8f4ff;
+            border-left: 4px solid #0f62fe;
+            border-radius: 2px;
+        }
+        
+        .app-info-content strong {
+            display: block;
+            font-size: 0.95rem;
+            color: #161616;
+            margin-bottom: var(--cds-spacing-03);
+            font-weight: 600;
+        }
+        
+        .app-info-content span {
+            font-size: 1.1rem;
+            color: #0f62fe;
+            font-weight: 600;
+        }
+        
+        .cds--form-item {
+            margin-bottom: var(--cds-spacing-07);
+        }
+        
+        .cds--label {
+            font-size: 0.95rem;
+            font-weight: 600;
+            line-height: 1.5;
+            color: #161616;
+            margin-bottom: var(--cds-spacing-04);
+            display: block;
+        }
+        
+        .cds--text-input {
+            width: 100%;
+            padding: var(--cds-spacing-05) var(--cds-spacing-06);
+            font-size: 1rem;
+            border: none;
+            border-bottom: 1px solid #8d8d8d;
+            background-color: #f4f4f4;
+            color: #161616;
+            outline: none;
+            border-radius: 0;
+            transition: all 0.2s;
+            line-height: 1.6;
+        }
+        
+        .cds--text-input:focus {
+            outline: 2px solid #0f62fe;
+            outline-offset: -2px;
+            border-bottom: 1px solid #0f62fe;
+            background-color: #ffffff;
+        }
+        
+        .cds--btn {
+            padding: var(--cds-spacing-05) var(--cds-spacing-06);
+            font-size: 1rem;
+            font-weight: 500;
+            border: none;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            transition: background-color 0.2s;
+        }
+        
+        .cds--btn--primary {
+            background-color: #0f62fe;
+            color: #ffffff;
+            width: 100%;
+        }
+        
+        .cds--btn--primary:hover {
+            background-color: #0353e9;
+        }
+        
+        .security-notification {
+            margin-top: var(--cds-spacing-08);
+        }
+        
+        .cds--inline-notification {
+            display: flex;
+            padding: var(--cds-spacing-07);
+            background-color: #e5f6ff;
+            border-left: 4px solid #0f62fe;
+            border-radius: 2px;
+        }
+        
+        .cds--inline-notification__details {
+            flex: 1;
+        }
+        
+        .cds--inline-notification__text-wrapper {
+            display: flex;
+            align-items: center;
+            gap: var(--cds-spacing-03);
+        }
+        
+        .cds--inline-notification__subtitle {
+            font-size: 0.95rem;
+            color: #161616;
+            margin: 0;
+            line-height: 1.5;
+        }
+        
+        .icon {
+            width: 20px;
+            height: 20px;
+            fill: currentColor;
+            flex-shrink: 0;
+        }
+        
+        .icon-large {
+            width: 24px;
+            height: 24px;
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <div class="header">
-            <h1>🔐 PSD2 Authentication</h1>
-            <p>Secure Payment Authorization</p>
-        </div>
-        
-        <div class="app-info" id="appInfo">
-            <strong>Application requesting access:</strong>
-            <span id="appName">Loading...</span>
-        </div>
-        
-        <form id="loginForm">
-            <div class="form-group">
-                <label for="username">Username</label>
-                <input type="text" id="username" name="username" required placeholder="Enter your username">
+    <div class="cds--grid">
+        <div class="cds--row">
+            <div class="cds--col">
+                <div class="login-container">
+                    <div class="header-section">
+                        <h1>
+                            <svg class="icon icon-large" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+                                <path d="M21,22H19V20a1.0011,1.0011,0,0,0-1-1H14a1.0011,1.0011,0,0,0-1,1v2H11V20a3.0033,3.0033,0,0,1,3-3h4a3.0033,3.0033,0,0,1,3,3Z"/>
+                                <path d="M16,16a3.5,3.5,0,1,1,3.5-3.5A3.5041,3.5041,0,0,1,16,16Zm0-5a1.5,1.5,0,1,0,1.5,1.5A1.5017,1.5017,0,0,0,16,11Z"/>
+                                <path d="M30.4141,17.4141a1.9995,1.9995,0,0,0,0-2.8282L24.6272,8.7993l2.9006-2.8628a2.0018,2.0018,0,1,0-1.4416-1.3872L23.2129,7.3848,17.4141,1.5859a1.9995,1.9995,0,0,0-2.8282,0L8.7993,7.3726,5.9368,4.4717A2.002,2.002,0,1,0,4.55,5.9136l2.835,2.8735L1.5859,14.5859a1.9995,1.9995,0,0,0,0,2.8282l5.7989,5.7988L4.55,26.0864a1.9977,1.9977,0,1,0,1.387,1.4419l2.8625-2.9009,5.7866,5.7867a1.9995,1.9995,0,0,0,2.8282,0l5.7988-5.7989,2.8733,2.8355a1.998,1.998,0,1,0,1.4416-1.3872l-2.9006-2.8628ZM16,29,3,16,16,3,29,16Z"/>
+                            </svg>
+                            PSD2 Authentication
+                        </h1>
+                        <p>Secure Payment Authorization</p>
+                    </div>
+                    
+                    <div class="app-info-tile">
+                        <div class="app-info-content">
+                            <strong>Application requesting access:</strong>
+                            <span id="appName">Loading...</span>
+                        </div>
+                    </div>
+                    
+                    <form id="loginForm" class="cds--form">
+                        <div class="cds--form-item">
+                            <label for="username" class="cds--label">Username</label>
+                            <input 
+                                id="username" 
+                                name="username" 
+                                type="text" 
+                                class="cds--text-input" 
+                                placeholder="Enter your username"
+                                required
+                            />
+                        </div>
+                        
+                        <div class="cds--form-item">
+                            <label for="password" class="cds--label">Password</label>
+                            <input 
+                                id="password" 
+                                name="password" 
+                                type="password" 
+                                class="cds--text-input" 
+                                placeholder="Enter your password"
+                                required
+                            />
+                        </div>
+                        
+                        <button type="submit" class="cds--btn cds--btn--primary">
+                            Continue to Authorization
+                        </button>
+                    </form>
+                    
+                    <div class="security-notification">
+                        <div class="cds--inline-notification" role="alert">
+                            <div class="cds--inline-notification__details">
+                                <div class="cds--inline-notification__text-wrapper">
+                                    <svg class="icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+                                        <path d="M24,30H8a2,2,0,0,1-2-2V16a2,2,0,0,1,2-2H9V8a7,7,0,0,1,14,0v6h1a2,2,0,0,1,2,2V28A2,2,0,0,1,24,30ZM8,16V28H24V16Zm5-2h6V8a3,3,0,0,0-6,0Z"/>
+                                    </svg>
+                                    <p class="cds--inline-notification__subtitle">
+                                        This is a secure PSD2 consent flow. Your credentials are transmitted securely.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
-            
-            <div class="form-group">
-                <label for="password">Password</label>
-                <input type="password" id="password" name="password" required placeholder="Enter your password">
-            </div>
-            
-            <button type="submit" class="btn">Continue to Authorization</button>
-        </form>
-        
-        <div class="security-note">
-            🔒 This is a secure PSD2 consent flow. Your credentials are transmitted securely.
         </div>
     </div>
     

@@ -538,321 +538,122 @@ app.get('/store-overview', (req, res) => {
                    consentData.data.Data.Initiation.RemittanceInformation?.Unstructured || '-'
     }));
     
-    res.send(`
-        <!DOCTYPE html>
-        <html lang="en">
-        <head>
-            <meta charset="UTF-8">
-            <meta name="viewport" content="width=device-width, initial-scale=1.0">
-            <title>PSD2 - Authorization Store Overview</title>
-            <style>
-                * {
-                    margin: 0;
-                    padding: 0;
-                    box-sizing: border-box;
-                }
-                
-                body {
-                    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-                    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-                    min-height: 100vh;
-                    padding: 20px;
-                }
-                
-                .container {
-                    max-width: 1000px;
-                    margin: 0 auto;
-                    background: white;
-                    border-radius: 12px;
-                    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
-                    padding: 40px;
-                }
-                
-                .header {
-                    text-align: center;
-                    margin-bottom: 30px;
-                    padding-bottom: 20px;
-                    border-bottom: 2px solid #f0f0f0;
-                }
-                
-                .header h1 {
-                    color: #333;
-                    font-size: 32px;
-                    margin-bottom: 10px;
-                }
-                
-                .header p {
-                    color: #666;
-                    font-size: 16px;
-                }
-                
-                .stats {
-                    display: grid;
-                    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-                    gap: 20px;
-                    margin-bottom: 30px;
-                }
-                
-                .stat-card {
-                    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-                    color: white;
-                    padding: 20px;
-                    border-radius: 8px;
-                    text-align: center;
-                }
-                
-                .stat-card h3 {
-                    font-size: 14px;
-                    font-weight: 500;
-                    margin-bottom: 10px;
-                    opacity: 0.9;
-                }
-                
-                .stat-card .value {
-                    font-size: 36px;
-                    font-weight: 700;
-                }
-                
-                .table-container {
-                    overflow-x: auto;
-                    margin-bottom: 20px;
-                }
-                
-                table {
-                    width: 100%;
-                    border-collapse: collapse;
-                    background: white;
-                }
-                
-                thead {
-                    background: #f8f9fa;
-                }
-                
-                th {
-                    padding: 15px;
-                    text-align: left;
-                    font-weight: 600;
-                    color: #333;
-                    border-bottom: 2px solid #e0e0e0;
-                }
-                
-                td {
-                    padding: 15px;
-                    border-bottom: 1px solid #f0f0f0;
-                    color: #666;
-                }
-                
-                tr:hover {
-                    background: #f8f9fa;
-                }
-                
-                .consent-id {
-                    font-family: 'Courier New', monospace;
-                    font-size: 13px;
-                    color: #667eea;
-                }
-                
-                .empty-state {
-                    text-align: center;
-                    padding: 60px 20px;
-                    color: #999;
-                }
-                
-                .empty-state-icon {
-                    font-size: 64px;
-                    margin-bottom: 20px;
-                }
-                
-                .empty-state h3 {
-                    font-size: 24px;
-                    color: #666;
-                    margin-bottom: 10px;
-                }
-                
-                .empty-state p {
-                    font-size: 16px;
-                }
-                
-                .actions {
-                    display: flex;
-                    gap: 10px;
-                    justify-content: center;
-                    margin-top: 30px;
-                }
-                
-                .btn {
-                    padding: 12px 24px;
-                    border: none;
-                    border-radius: 6px;
-                    font-size: 14px;
-                    font-weight: 600;
-                    cursor: pointer;
-                    text-decoration: none;
-                    display: inline-block;
-                    transition: transform 0.2s, box-shadow 0.2s;
-                }
-                
-                .btn-primary {
-                    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-                    color: white;
-                }
-                
-                .btn-secondary {
-                    background: #f0f0f0;
-                    color: #333;
-                }
-                
-                .btn:hover {
-                    transform: translateY(-2px);
-                    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-                }
-                
-                .refresh-info {
-                    text-align: center;
-                    color: #999;
-                    font-size: 14px;
-                    margin-top: 20px;
-                }
-                
-                .timestamp {
-                    color: #999;
-                    font-size: 12px;
-                }
-            </style>
-        </head>
-        <body>
-            <div class="container">
-                <div class="header">
-                    <h1>💾 Authorization Store Overview</h1>
-                    <p>Current stored authorizations and consent IDs</p>
-                </div>
-                
-                <div class="stats">
-                    <div class="stat-card">
-                        <h3>Total Authorizations</h3>
-                        <div class="value">${sessions.length}</div>
-                    </div>
-                    <div class="stat-card">
-                        <h3>Total Consents</h3>
-                        <div class="value">${consents.length}</div>
-                    </div>
-                    <div class="stat-card">
-                        <h3>Server Status</h3>
-                        <div class="value">🟢</div>
-                    </div>
-                </div>
-                
-                <h2 style="color: #333; font-size: 24px; margin: 30px 0 20px 0; padding-bottom: 10px; border-bottom: 2px solid #f0f0f0;">💳 Created Consents</h2>
-                
-                ${consents.length > 0 ? `
-                    <div class="table-container">
-                        <table>
-                            <thead>
-                                <tr>
-                                    <th>#</th>
-                                    <th>Consent ID</th>
-                                    <th>Status</th>
-                                    <th>Username</th>
-                                    <th>Confirmation</th>
-                                    <th>Amount</th>
-                                    <th>Creditor</th>
-                                    <th>Reference</th>
-                                    <th>Created At</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                ${consents.map((consent, index) => {
-                                    const statusColor = consent.status === 'authorized' ? '#d4edda' : '#fff3cd';
-                                    const statusTextColor = consent.status === 'authorized' ? '#155724' : '#856404';
-                                    return `
-                                    <tr>
-                                        <td>${index + 1}</td>
-                                        <td class="consent-id">${consent.consentId}</td>
-                                        <td><span style="background: ${statusColor}; padding: 4px 8px; border-radius: 4px; font-size: 12px; font-weight: 600; color: ${statusTextColor};">${consent.status}</span></td>
-                                        <td>${consent.username}</td>
-                                        <td class="consent-id" style="font-size: 11px;">${consent.confirmation === '-' ? '-' : '***' + consent.confirmation.slice(-8)}</td>
-                                        <td><strong>${consent.amount} ${consent.currency}</strong></td>
-                                        <td>${consent.creditorName}</td>
-                                        <td>${consent.reference}</td>
-                                        <td class="timestamp">${new Date(consent.createdAt).toLocaleString()}</td>
-                                    </tr>
-                                `}).join('')}
-                            </tbody>
-                        </table>
-                    </div>
-                ` : `
-                    <div class="empty-state">
-                        <div class="empty-state-icon">📄</div>
-                        <h3>No Consents Created Yet</h3>
-                        <p>Use the POST /createconsent endpoint to create payment consents.</p>
-                    </div>
-                `}
-                
-                <h2 style="color: #333; font-size: 24px; margin: 30px 0 20px 0; padding-bottom: 10px; border-bottom: 2px solid #f0f0f0;">🔐 Authorized Sessions</h2>
-                
-                ${sessions.length > 0 ? `
-                    <div class="table-container">
-                        <table>
-                            <thead>
-                                <tr>
-                                    <th>#</th>
-                                    <th>Username</th>
-                                    <th>Password (Consent ID)</th>
-                                    <th>Auth Credentials</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                ${sessions.map((session, index) => `
-                                    <tr>
-                                        <td>${index + 1}</td>
-                                        <td><strong>${session.username}</strong></td>
-                                        <td class="consent-id">${session.consentId}</td>
-                                        <td class="consent-id">
-                                            <strong>Username:</strong> ${session.username}<br>
-                                            <strong>Password:</strong> ${session.consentId}
-                                        </td>
-                                    </tr>
-                                `).join('')}
-                            </tbody>
-                        </table>
-                        <div style="margin-top: 20px; padding: 15px; background: #fff3cd; border-left: 4px solid #ffc107; border-radius: 4px;">
-                            <strong>ℹ️ Authentication Info:</strong>
-                            <p style="margin: 10px 0 0 0; color: #856404; font-size: 14px;">
+    // Generate consents HTML
+    const consentsHTML = consents.length > 0 ? `
+        <div class="bx--data-table-container">
+            <table class="bx--data-table">
+                <thead>
+                    <tr>
+                        <th class="bx--table-header">#</th>
+                        <th class="bx--table-header">Consent ID</th>
+                        <th class="bx--table-header">Status</th>
+                        <th class="bx--table-header">Username</th>
+                        <th class="bx--table-header">Confirmation</th>
+                        <th class="bx--table-header">Amount</th>
+                        <th class="bx--table-header">Creditor</th>
+                        <th class="bx--table-header">Reference</th>
+                        <th class="bx--table-header">Created At</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    ${consents.map((consent, index) => {
+                        const statusClass = consent.status === 'authorized' ? 'status-authorized' : 'status-pending';
+                        return `
+                        <tr>
+                            <td class="bx--table-cell">${index + 1}</td>
+                            <td class="bx--table-cell consent-id">${consent.consentId}</td>
+                            <td class="bx--table-cell"><span class="status-badge ${statusClass}">${consent.status}</span></td>
+                            <td class="bx--table-cell">${consent.username}</td>
+                            <td class="bx--table-cell consent-id">${consent.confirmation === '-' ? '-' : '***' + consent.confirmation.slice(-8)}</td>
+                            <td class="bx--table-cell"><strong>${consent.amount} ${consent.currency}</strong></td>
+                            <td class="bx--table-cell">${consent.creditorName}</td>
+                            <td class="bx--table-cell">${consent.reference}</td>
+                            <td class="bx--table-cell timestamp">${new Date(consent.createdAt).toLocaleString()}</td>
+                        </tr>
+                    `}).join('')}
+                </tbody>
+            </table>
+        </div>
+    ` : `
+        <div class="empty-state">
+            <div class="empty-state-icon">📄</div>
+            <h3>No Consents Created Yet</h3>
+            <p>Use the POST /createconsent endpoint to create payment consents.</p>
+        </div>
+    `;
+    
+    // Generate sessions HTML
+    const sessionsHTML = sessions.length > 0 ? `
+        <div class="bx--data-table-container">
+            <table class="bx--data-table">
+                <thead>
+                    <tr>
+                        <th class="bx--table-header">#</th>
+                        <th class="bx--table-header">Username</th>
+                        <th class="bx--table-header">Password (Consent ID)</th>
+                        <th class="bx--table-header">Auth Credentials</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    ${sessions.map((session, index) => `
+                        <tr>
+                            <td class="bx--table-cell">${index + 1}</td>
+                            <td class="bx--table-cell"><strong>${session.username}</strong></td>
+                            <td class="bx--table-cell consent-id">${session.consentId}</td>
+                            <td class="bx--table-cell consent-id">
+                                <strong>Username:</strong> ${session.username}<br>
+                                <strong>Password:</strong> ${session.consentId}
+                            </td>
+                        </tr>
+                    `).join('')}
+                </tbody>
+            </table>
+            <div class="info-notification">
+                <div class="bx--inline-notification bx--inline-notification--info" role="alert">
+                    <div class="bx--inline-notification__details">
+                        <div class="bx--inline-notification__text-wrapper">
+                            <p class="bx--inline-notification__title">ℹ️ Authentication Info</p>
+                            <p class="bx--inline-notification__subtitle">
                                 Use these credentials for Basic Authentication on the <code>/auth</code> endpoint.<br>
                                 <strong>Username:</strong> The username from the table<br>
                                 <strong>Password:</strong> The Consent ID (intent-id) from the table
                             </p>
                         </div>
                     </div>
-                ` : `
-                    <div class="empty-state">
-                        <div class="empty-state-icon">📭</div>
-                        <h3>No Authorizations Yet</h3>
-                        <p>The authorization store is currently empty.</p>
-                        <p>Complete the consent flow to add authorizations.</p>
-                    </div>
-                `}
-                
-                <div class="actions">
-                    <a href="/" class="btn btn-secondary">← Back to Home</a>
-                    <button onclick="location.reload()" class="btn btn-primary">🔄 Refresh</button>
-                </div>
-                
-                <div class="refresh-info">
-                    <p class="timestamp">Last updated: ${new Date().toISOString()}</p>
-                    <p>This page auto-refreshes when you reload it</p>
                 </div>
             </div>
-            
-            <script>
-                // Auto-refresh every 30 seconds
-                setTimeout(() => {
-                    location.reload();
-                }, 30000);
-            </script>
-        </body>
-        </html>
-    `);
+        </div>
+    ` : `
+        <div class="empty-state">
+            <div class="empty-state-icon">📭</div>
+            <h3>No Authorizations Yet</h3>
+            <p>The authorization store is currently empty.</p>
+            <p>Complete the consent flow to add authorizations.</p>
+        </div>
+    `;
+    
+    // Read the HTML template and inject data
+    const fs = require('fs');
+    let html = fs.readFileSync(path.join(__dirname, 'views', 'store-overview.html'), 'utf8');
+    
+    // Inject the data into the template
+    html = html.replace('<div class="value" id="sessionsCount">0</div>', `<div class="value" id="sessionsCount">${sessions.length}</div>`);
+    html = html.replace('<div class="value" id="consentsCount">0</div>', `<div class="value" id="consentsCount">${consents.length}</div>`);
+    html = html.replace('<div id="consentsSection"></div>', `<div id="consentsSection">${consentsHTML}</div>`);
+    html = html.replace('<div id="sessionsSection"></div>', `<div id="sessionsSection">${sessionsHTML}</div>`);
+    html = html.replace('<p class="timestamp" id="lastUpdated">Last updated: Loading...</p>', `<p class="timestamp" id="lastUpdated">Last updated: ${new Date().toISOString()}</p>`);
+    
+    // Add auto-refresh script
+    html = html.replace('</body>', `
+        <script>
+            // Auto-refresh every 30 seconds
+            setTimeout(() => {
+                location.reload();
+            }, 30000);
+        </script>
+    </body>`);
+    
+    res.send(html);
 });
 
 
@@ -860,103 +661,19 @@ app.get('/store-overview', (req, res) => {
  * Root route - provides information about the service
  */
 app.get('/', (req, res) => {
-    res.send(`
-        <html>
-            <head>
-                <title>PSD2 Consent Flow Server</title>
-                <style>
-                    body {
-                        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-                        max-width: 800px;
-                        margin: 50px auto;
-                        padding: 20px;
-                        background: #f5f5f5;
-                    }
-                    .container {
-                        background: white;
-                        padding: 40px;
-                        border-radius: 12px;
-                        box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-                    }
-                    h1 { color: #333; }
-                    h2 { color: #667eea; margin-top: 30px; }
-                    code {
-                        background: #f4f4f4;
-                        padding: 2px 6px;
-                        border-radius: 3px;
-                        font-family: 'Courier New', monospace;
-                    }
-                    pre {
-                        background: #f4f4f4;
-                        padding: 15px;
-                        border-radius: 6px;
-                        overflow-x: auto;
-                    }
-                    .endpoint {
-                        background: #e8f5e9;
-                        padding: 10px;
-                        border-left: 4px solid #4caf50;
-                        margin: 10px 0;
-                    }
-                </style>
-            </head>
-            <body>
-                <div class="container">
-                    <h1>🔐 PSD2 Consent Flow Server</h1>
-                    <p>This server implements a demo PSD2 payment authorization consent flow with OAuth integration.</p>
-                    
-                    <h2>Available Endpoints</h2>
-                    
-                    <div class="endpoint">
-                        <strong>GET /login</strong>
-                        <p>Login page - First step of the consent flow</p>
-                        <p><strong>Query Parameters:</strong></p>
-                        <ul>
-                            <li><code>original-url</code> - OAuth authorization URL to redirect back to (required)</li>
-                            <li><code>state_nonce</code> - OAuth state parameter</li>
-                            <li><code>app-name</code> - Name of the requesting application</li>
-                        </ul>
-                    </div>
-                    
-                    <div class="endpoint">
-                        <strong>GET /consent</strong>
-                        <p>Payment authorization page - Second step of the consent flow</p>
-                        <p>Generates an intent-id and displays payment authorization details</p>
-                    </div>
-                    
-                    <div class="endpoint">
-                        <strong>GET /store-overview</strong>
-                        <p>View all stored authorizations and consent IDs</p>
-                        <p><strong>No authentication required</strong></p>
-                        <p><a href="/store-overview" style="color: #667eea;">→ View Store Overview</a></p>
-                    </div>
-                    
-                    <h2>Example Usage</h2>
-                    <pre>http://localhost:${PORT}/login?original-url=https://example.com/oauth/authorize?response_type=code&state_nonce=abc123&app-name=MyApp</pre>
-                    
-                    <h2>Flow Description</h2>
-                    <ol>
-                        <li>User is redirected from API Connect to <code>/login</code></li>
-                        <li>User enters credentials on the login page</li>
-                        <li>User is redirected to <code>/consent</code> page</li>
-                        <li>System generates a unique intent-id (UUID)</li>
-                        <li>User reviews and authorizes the payment</li>
-                        <li>User is redirected back to the original-url with username and confirmation (intent-id) parameters</li>
-                    </ol>
-                    
-                    <p style="margin-top: 30px; color: #666; font-size: 14px;">
-                        Server running on port ${PORT}
-                    </p>
-                </div>
-            </body>
-        </html>
-    `);
+    const fs = require('fs');
+    let html = fs.readFileSync(path.join(__dirname, 'views', 'home.html'), 'utf8');
+    
+    // Replace PORT placeholder
+    html = html.replace(/\{\{PORT\}\}/g, PORT);
+    
+    res.send(html);
 });
 
 // Health check endpoint
 app.get('/health', (req, res) => {
-    res.json({ 
-        status: 'healthy', 
+    res.json({
+        status: 'healthy',
         service: 'PSD2 Consent Flow',
         timestamp: new Date().toISOString()
     });
@@ -964,58 +681,25 @@ app.get('/health', (req, res) => {
 
 // 404 handler
 app.use((req, res) => {
-    res.status(404).send(`
-        <html>
-            <head>
-                <title>404 - Not Found</title>
-                <style>
-                    body {
-                        font-family: Arial, sans-serif;
-                        display: flex;
-                        justify-content: center;
-                        align-items: center;
-                        height: 100vh;
-                        margin: 0;
-                        background: #f5f5f5;
-                    }
-                    .error-box {
-                        background: white;
-                        padding: 40px;
-                        border-radius: 8px;
-                        box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-                        text-align: center;
-                    }
-                    h1 { color: #d32f2f; }
-                    a { color: #667eea; text-decoration: none; }
-                </style>
-            </head>
-            <body>
-                <div class="error-box">
-                    <h1>404 - Page Not Found</h1>
-                    <p>The requested page does not exist.</p>
-                    <p><a href="/">← Return to Home</a></p>
-                </div>
-            </body>
-        </html>
-    `);
+    const fs = require('fs');
+    const html = fs.readFileSync(path.join(__dirname, 'views', '404.html'), 'utf8');
+    res.status(404).send(html);
 });
 
 // Start server
-app.listen(PORT, '0.0.0.0', () => {
-
+app.listen(PORT, '0.0.0.0' , () => {
     console.log('='.repeat(60));
     console.log('🚀 PSD2 Consent Flow Server Started');
     console.log('='.repeat(60));
-    console.log(`📍 Server running on 0.0.0.0:${PORT} (inside container)`);
-    console.log(`🔐 Login endpoint: /login`);
-    console.log(`💳 Consent endpoint: /consent`);
-    console.log(`🔑 Auth endpoint: /auth`);
-    console.log(`💾 Store auth: /store-authorization`);
-    console.log(`📊 Store overview: /store-overview`);
-    console.log(`❤️  Health check: /health`);
+    console.log(`📍 Server running at: http://localhost:${PORT}`);
+    console.log(`🔐 Login endpoint: http://localhost:${PORT}/login`);
+    console.log(`💳 Consent endpoint: http://localhost:${PORT}/consent`);
+    console.log(`🔑 Auth endpoint: http://localhost:${PORT}/auth`);
+    console.log(`💾 Store auth: http://localhost:${PORT}/store-authorization`);
+    console.log(`📊 Store overview: http://localhost:${PORT}/store-overview`);
+    console.log(`❤️  Health check: http://localhost:${PORT}/health`);
     console.log('='.repeat(60));
     console.log('Press Ctrl+C to stop the server');
-    console.log('='.repeat(60));
     console.log('='.repeat(60));
 });
 
